@@ -1,0 +1,277 @@
+/**
+ Author: Dongkyu Lim
+ Date: Sep 7 2016
+ Assignment 2
+ Description:
+ This program is menu driven program. This will bring a menu containing 5 options which users can select.
+ User input must be typed on command line, then it will be stored in the array. I created 6 methods and 
+ every method is called in main method. This program asks user to select one option among 5 options. 
+ User can get mode, median, mean, largest and smallest value in the array. Mode could be multiple 
+ so I used arraylist as container. Median, mean, smallest and largest return only one value. In menu method, 
+ I used swich statement and it will return one number from 1 to 5 from the user.
+ If there is no argument on the command line, this program will stop and give you a message 
+ saying "You need to type inputs"). I hard coded this program and I was running this program by using termianl only.
+ */
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+public class main {
+    
+    public static void main(String[] args){
+        
+        //If there is no input on the command line, then it will print error message and exit.
+        if(args.length == 0){
+            System.out.println("There is no command line argument! You need to type inputs\n");
+            System.exit(0);
+        }
+        
+        int count = 0;
+        int total = 0;
+        int large=Integer.parseInt(args[0]);
+        int small=Integer.parseInt(args[0]);
+        
+        int length = args.length;
+        int [] myArray;
+        myArray = new int[length];
+        
+        // looping through and put each element into the array
+        for ( int i = 0; i < args.length; i++ ){
+            myArray[i] = Integer.parseInt(args[i]);
+        }
+        
+        System.out.print("This is the array before sorted= ");
+        for (int i=0; i<myArray.length; i++){
+            System.out.print(myArray[i]);
+            System.out.print(" ");
+        }
+        System.out.print("\n");
+        
+        int number = menu();
+        switch(number){
+            case 1:
+                Integer[] myModes = getModes(myArray);
+                System.out.print("myModes = ");
+                int tmp=0;
+                for(int i=0; i < myModes.length; i++){
+                
+                    System.out.print(myModes[i]);
+                    System.out.print(" ");
+                
+                }
+                System.out.print("\n");
+                break;
+            
+            case 2:
+                double median = sortedMedian(myArray);
+                System.out.print("median= ");
+                System.out.printf("%.2f",median);
+                System.out.print("\n");
+                break;
+                
+            case 3:
+                double mean = getMean(myArray);
+                System.out.print("mean=");
+                System.out.printf("%.2f",mean);
+                System.out.print("\n");
+                break;
+                
+            case 4:
+                int largest = getLargest(myArray);
+                System.out.print("largest= ");
+                System.out.printf("%d", largest);
+                System.out.print("\n");
+                break;
+                
+            case 5:
+                int smallest = getSmallest(myArray);
+                System.out.print("smallest= ");
+                System.out.printf("%d", smallest);
+                System.out.print("\n");
+                break;
+                
+            default:
+                System.out.println("wrong number selected!\n");
+                break;
+        }
+    }
+    
+    /**
+     This is getMean method. This is looping through the array and gets mean.
+     
+     input: myArray
+     output: double avg
+     */
+    public static double getMean(int[] myArray){
+        double mean=0;
+        int ct =0;
+        int total=0;
+        double avg =0;
+        
+        for(int i=0; i<myArray.length; i++){
+            total = myArray[i] + total;
+            ct++;
+        }
+        avg = total/ct;
+        return avg;
+    }
+    
+    
+    /**
+     This is getLargest method. This is looping through the array and finds largest number in the array
+     
+     input: myArray
+     output: int large
+     */
+    public static int getLargest(int[] myArray){
+        
+        int large=myArray[0];
+        int length = myArray.length;
+        
+        for ( int i = 0; i < myArray.length; i++ ){
+            
+            if(large < myArray[i]){
+                large = myArray[i];
+            }
+        }
+        return large;
+        
+    }
+    
+    /**
+     This is getSmallest method. This is looping through the array and finds smallest number in the array
+     
+     input: myArray
+     output: int small
+     */
+    public static int getSmallest(int[] myArray){
+        
+        int small=myArray[0];
+        int length = myArray.length;
+        
+        for ( int i = 0; i < myArray.length; i++ ){
+            
+            if(small > myArray[i]){
+                small = myArray[i];
+            }
+        }
+        return small;
+        
+    }
+    
+    /**
+     This is sortedMedian method. This sorts the array first and calculates the median. 
+     If there is odd number of elements in the array then it will find the middle one as median. 
+     If there is even number of elements in the array then it will find two middles average as median.
+     
+     input = myArray
+     output = float median
+     */
+    public static double sortedMedian(int[] myArray){
+        double median;
+        Arrays.sort(myArray);
+        System.out.print("myArray has been sorted...\n");
+        
+        for(int i=0; i<myArray.length;i++){
+            System.out.print(myArray[i]);
+            System.out.print(" ");
+        }
+        System.out.print("\n");
+        
+        int middle = myArray.length/2;
+        if(myArray.length%2 == 1){
+            median = myArray[middle];
+            
+        }
+        else{
+            median = (myArray[middle-1] + myArray[middle]) / 2.0 ;
+            
+        }
+        return median;
+    }
+ 
+    /**
+     This is getModes method. This gets myArray as input and find highest occurences in the array. 
+     Output could be more than 1. This method contains data into the arraylist to store multiple modes.
+     
+     input:  myArray
+     output: modeList (This contains mode(s))
+     */
+
+    public static Integer[] getModes(int[] myArray){
+        List<Integer> modeList = new ArrayList<Integer>();
+        
+        int maxCount=0;
+        
+        for (int i = 0; i < myArray.length; i++){
+            int count = 0;
+            for (int j = 0; j < myArray.length; j++){
+                if (myArray[j] == myArray[i]){
+                    count++;
+                }
+            }
+            //This condition checks if there already exitst an element in the list.
+            //If there is no, then put the highest occurences in the modeList
+            if (count > maxCount){
+                maxCount = count;
+                modeList.clear();
+                if(!modeList.contains(myArray[i])){
+                    modeList.add( myArray[i] );
+                }
+            }
+            else if ( count == maxCount ){
+                if(!modeList.contains(myArray[i])){
+                    modeList.add( myArray[i] );
+                }
+            }
+        }
+        return modeList.toArray(new Integer[modeList.size()]);
+    }
+    
+   
+    
+    /**
+     This is menu driven method. This contains 5 options which are user inputs.
+     This method returns the number which users select.
+     
+     input: none
+     output: int choice
+     **/
+    public static int menu(){
+        Scanner input = new Scanner(System.in);
+        
+        System.out.println("\n\tSelect one option!");
+        System.out.println("\t\t1.Mode");
+        System.out.println("\t\t2.Median(This sorts the array)");
+        System.out.println("\t\t3.Mean");
+        System.out.println("\t\t4.Largest");
+        System.out.println("\t\t5.Smallest");
+        
+        int choice=input.nextInt();
+        switch(choice){
+            case 1:
+                choice = 1;
+                break;
+            case 2:
+                choice = 2;
+                break;
+            case 3:
+                choice = 3;
+                break;
+            case 4:
+                choice= 4;
+                break;
+            case 5:
+                choice= 5;
+                break;
+            default:
+                System.out.println("Error!!!");
+        
+        }
+        return choice;
+    }
+
+}
